@@ -1,6 +1,6 @@
 {
   "name": "react-native-expandable-sheet",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Draggable and expandable bottom sheet component for React Native using Reanimated and Gesture Handler.",
   "source": "./src/index.tsx",
   "main": "./lib/module/index.js",
@@ -119,7 +119,9 @@
     },
     "github": {
       "release": true,
-      "tokenRef": "GITHUB_TOKEN"
+      "tokenRef": "GITHUB_TOKEN",
+      "web": true,
+      "autoGenerate": true
     },
     "plugins": {
       "@release-it/conventional-changelog": {
