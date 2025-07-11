@@ -42,7 +42,11 @@
   "keywords": [
     "react-native",
     "ios",
-    "android"
+    "android",
+    "bottom-sheet",
+    "action-sheet",
+    "draggable",
+    "expandable"
   ],
   "repository": {
     "type": "git",
