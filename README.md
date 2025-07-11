@@ -1,6 +1,8 @@
 # react-native-expandable-sheet
 
-Draggable and expandable bottom sheet component for React Native using Reanimated and Gesture Handler.
+A draggable and expandable bottom sheet component for React Native, built with Reanimated and Gesture Handler.
+
+![](https://github.com/warapolj/react-native-expandable-sheet/tree/main/assets/showcase.gif)
 
 ## Installation
 
@@ -10,19 +12,25 @@ npm install react-native-expandable-sheet
 
 ## Usage
 
+Please check the [example](https://github.com/warapolj/react-native-expandable-sheet/tree/main/example) folder to explore more example codes.
 
 ```js
-import { multiply } from 'react-native-expandable-sheet';
+import ExpandableSheet from 'react-native-expandable-sheet';
 
-// ...
-
-const result = await multiply(3, 7);
+export default function App() {
+  return (
+    <ExpandableSheet
+      renderExpandedSection={() => <View />}
+      renderCollapsedSection={() => <View />}
+      renderHeader={() => <View />}
+    />
+  );
+}
 ```
-
 
 ## Contributing
 
-See the [contributing guide](CONTRIBUTING.md) to learn how to contribute to the repository and the development workflow.
+See the [contributing guide](CONTRIBUTING.md) for instructions on contributing and setting up the development workflow.
 
 ## License
 
