@@ -29,10 +29,14 @@ interface ExpandableSheetProps {
     isExpanded,
     toggleExpand,
   }: ExpandableProps) => React.ReactElement;
-  renderHeader?: () => React.ReactElement;
+  renderHeader?: ({
+    isExpanded,
+    toggleExpand,
+  }: ExpandableProps) => React.ReactElement;
   draggableThreshold?: number;
   backdropOpacity?: number;
   onMinHeightChange?: (minHeight: number) => void;
+  onExpandedChange?: (isExpanded: boolean) => void;
 }
 
 const ExpandableSheet = ({
@@ -42,6 +46,7 @@ const ExpandableSheet = ({
   draggableThreshold = 50,
   backdropOpacity = 0.5,
   onMinHeightChange,
+  onExpandedChange,
 }: ExpandableSheetProps) => {
   const [expanded, setExpanded] = useState(false);
   const [expandedHeight, setExpandedHeight] = useState(0);
@@ -50,10 +55,6 @@ const ExpandableSheet = ({
   const startY = useSharedValue(0);
   const progress = useSharedValue(0);
   const collapsedSnap = useSharedValue(0);
-
-  useEffect(() => {
-    collapsedSnap.value = collapsedHeight;
-  }, [collapsedHeight, collapsedSnap]);
 
   const snapTo = (toExpanded: boolean) => {
     progress.value = withSpring(toExpanded ? 1 : 0, { damping: 20 });
@@ -130,18 +131,28 @@ const ExpandableSheet = ({
     setCollapsedHeight(e.nativeEvent.layout.height);
   };
 
-  useEffect(() => {
-    if (onMinHeightChange) {
-      onMinHeightChange(headerHeight + collapsedHeight);
-    }
-  }, [headerHeight, collapsedHeight, onMinHeightChange]);
-
   const handleBackdropPress = () => {
     if (progress.value > 0) {
       progress.value = withSpring(0, { damping: 20 });
       setExpanded(false);
     }
   };
+
+  useEffect(() => {
+    if (onMinHeightChange) {
+      onMinHeightChange(headerHeight + collapsedHeight);
+    }
+  }, [headerHeight, collapsedHeight, onMinHeightChange]);
+
+  useEffect(() => {
+    collapsedSnap.value = collapsedHeight;
+  }, [collapsedHeight, collapsedSnap]);
+
+  useEffect(() => {
+    if (onExpandedChange) {
+      onExpandedChange(expanded);
+    }
+  }, [expanded, onExpandedChange]);
 
   return (
     <Animated.View style={[styles.container, animatedContainerStyle]}>
@@ -152,7 +163,14 @@ const ExpandableSheet = ({
       <GestureDetector gesture={panGesture}>
         <View style={styles.gestureContainer}>
           <View onLayout={(e) => setHeaderHeight(e.nativeEvent.layout.height)}>
-            {renderHeader ? renderHeader() : <DragHandle />}
+            {renderHeader ? (
+              renderHeader({
+                isExpanded: expanded,
+                toggleExpand: () => snapTo(!expanded),
+              })
+            ) : (
+              <DragHandle />
+            )}
           </View>
           <View
             style={styles.hiddendExpandedSection}
