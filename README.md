@@ -2,7 +2,7 @@
 
 A draggable and expandable bottom sheet component for React Native, built with Reanimated and Gesture Handler.
 
-![](https://github.com/warapolj/react-native-expandable-sheet/tree/main/assets/showcase.gif)
+![Showcase of react-native-expandable-sheet](https://raw.githubusercontent.com/warapolj/react-native-expandable-sheet/main/assets/showcase.gif)
 
 ## Installation
 
