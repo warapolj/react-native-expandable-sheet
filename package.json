@@ -82,7 +82,9 @@
   },
   "peerDependencies": {
     "react": "*",
-    "react-native": "*"
+    "react-native": "*",
+    "react-native-gesture-handler": "^2.27.1",
+    "react-native-reanimated": "^3.18.0"
   },
   "workspaces": [
     "example"
