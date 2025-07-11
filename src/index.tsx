@@ -6,35 +6,12 @@ import Animated, {
   withSpring,
   runOnJS,
 } from 'react-native-reanimated';
-import { View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import type { LayoutChangeEvent } from 'react-native';
 
 const DragHandle = React.memo(() => (
-  <View
-    style={{
-      shadowColor: '#000',
-      shadowOffset: { width: 0, height: 1 },
-      shadowOpacity: 0.15,
-      shadowRadius: 2,
-      elevation: 4,
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'center',
-      paddingVertical: 8,
-      backgroundColor: 'white',
-      borderTopLeftRadius: 16,
-      borderTopRightRadius: 16,
-      height: 32,
-    }}
-  >
-    <View
-      style={{
-        width: 40,
-        height: 4,
-        backgroundColor: '#C0C0C0',
-        borderRadius: 2,
-      }}
-    />
+  <View style={styles.headerContainer}>
+    <View style={styles.dragHandle} />
   </View>
 ));
 
@@ -167,41 +144,18 @@ const ExpandableSheet = ({
   };
 
   return (
-    <Animated.View
-      style={[
-        {
-          flex: 1,
-          position: 'absolute',
-          width: '100%',
-          height: '100%',
-          zIndex: 100,
-        },
-        animatedContainerStyle,
-      ]}
-    >
+    <Animated.View style={[styles.container, animatedContainerStyle]}>
       <Animated.View
         style={animatedBackdropStyle}
         onTouchEnd={handleBackdropPress}
       />
       <GestureDetector gesture={panGesture}>
-        <View
-          style={{
-            position: 'absolute',
-            width: '100%',
-            bottom: 0,
-            zIndex: 10,
-          }}
-        >
+        <View style={styles.gestureContainer}>
           <View onLayout={(e) => setHeaderHeight(e.nativeEvent.layout.height)}>
             {renderHeader ? renderHeader() : <DragHandle />}
           </View>
           <View
-            style={{
-              position: 'absolute',
-              width: '100%',
-              zIndex: -1,
-              opacity: 0,
-            }}
+            style={styles.hiddendExpandedSection}
             onLayout={onExpandedLayout}
           >
             {renderExpandedSection({
@@ -210,27 +164,14 @@ const ExpandableSheet = ({
             })}
           </View>
           <Animated.View
-            style={[
-              {
-                width: '100%',
-                overflow: 'hidden',
-                backgroundColor: 'white',
-              },
-              animatedExpandedStyle,
-            ]}
+            style={[styles.expandedSection, animatedExpandedStyle]}
           >
             {renderExpandedSection({
               isExpanded: expanded,
               toggleExpand: () => snapTo(!expanded),
             })}
           </Animated.View>
-          <View
-            style={{
-              backgroundColor: 'white',
-              width: '100%',
-            }}
-            onLayout={onCollapsedLayout}
-          >
+          <View style={styles.collapsedSection} onLayout={onCollapsedLayout}>
             {renderCollapsedSection({
               isExpanded: expanded,
               toggleExpand: () => snapTo(!expanded),
@@ -241,5 +182,57 @@ const ExpandableSheet = ({
     </Animated.View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+    zIndex: 100,
+  },
+  gestureContainer: {
+    position: 'absolute',
+    width: '100%',
+    bottom: 0,
+    zIndex: 10,
+  },
+  hiddendExpandedSection: {
+    position: 'absolute',
+    width: '100%',
+    zIndex: -1,
+    opacity: 0,
+  },
+  expandedSection: {
+    width: '100%',
+    overflow: 'hidden',
+    backgroundColor: 'white',
+  },
+  collapsedSection: {
+    backgroundColor: 'white',
+    width: '100%',
+  },
+  headerContainer: {
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.15,
+    shadowRadius: 2,
+    elevation: 4,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 8,
+    backgroundColor: 'white',
+    borderTopLeftRadius: 16,
+    borderTopRightRadius: 16,
+    height: 32,
+  },
+  dragHandle: {
+    width: 40,
+    height: 4,
+    backgroundColor: '#C0C0C0',
+    borderRadius: 2,
+  },
+});
 
 export default React.memo(ExpandableSheet);
